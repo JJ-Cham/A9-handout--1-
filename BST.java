@@ -10,94 +10,156 @@ public class BST<E extends Comparable<E>> extends BinaryTree<E> implements BST_O
         super();
     }
 
+    public BST(E data){
+        super(data);
+    }
+
+    /** Only allow BST children */
+    @Override
+    public void setLeft(BinaryTree<E> left) {
+        if (left == null || left instanceof BST<?>) {
+            super.setLeft(left);
+        } else {
+            throw new UnsupportedOperationException("Only BST children allowed");
+        }
+    }
+
+    /** Only allow BST children */
+    @Override
+    public void setRight(BinaryTree<E> right) {
+        if (right == null || right instanceof BST<?>) {
+            super.setRight(right);
+        } else {
+            throw new UnsupportedOperationException("Only BST children allowed");
+        }
+    }
+
     //methods from BST_Ops interface stubs
     //goal: return the BST node containing data, or null if not found
     //? condtional operator
     @Override
-    public void BST<E> lookup (E data){
-        if (data == null)
-            return null;
-        int cmp = data.compareTo(this.root.getData());
-        if (cmp == 0) 
-            return this;
-        else if (cmp < 0){
-            //search left subtree
-            return (this.getLeft() == null) ? null : this.getLeft().lookup(data);
-        } else {
-            //search right subtree
-            return (this.getRight() == null) ? null : this.getRight().lookup(data);
-        }
+    public BST<E> lookup(E data) {
+        if (getData() == null) return null;
 
-    
+        int cmp = data.compareTo(getData());
+
+        if (cmp == 0) return this;
+
+        if (cmp < 0) {
+            if (getLeft() == null) return null;
+            return ((BST<E>) getLeft()).lookup(data);
+        } else {
+            if (getRight() == null) return null;
+            return ((BST<E>) getRight()).lookup(data);
+        }
     }
 
     //no duplicates allowed, create new node when inserting
     @Override
-    public void insert (E data){
-        int cmp = data.compareTo(this.getData());
-
-        if (cmp == 0){
-            return; //duplicate, do nothing
+    public void insert(E data) {
+        if (getData() == null) {       // Empty root case
+            setData(data);
+            return;
         }
-        else if (cmp < 0){
-            //insert into left subtree
-            if (this.getLeft() == null){
-                this.setLeft(new BST<E>());
+
+        int cmp = data.compareTo(getData());
+
+        if (cmp == 0) return;          // Duplicate – do nothing
+
+        if (cmp < 0) {
+            if (getLeft() == null) {
+                BST<E> child = new BST<>(data);
+                setLeft(child);
+                child.setParent(this);
+            } else {
+                ((BST<E>) getLeft()).insert(data);
             }
-            this.getLeft().insert(data);
         } else {
-            //insert into right subtree
-            if (this.getRight() == null){
-                this.setRight(new BST<E>());
+            if (getRight() == null) {
+                BST<E> child = new BST<>(data);
+                setRight(child);
+                child.setParent(this);
+            } else {
+                ((BST<E>) getRight()).insert(data);
             }
-            this.getRight().insert(data);
         }
-
-
     }
 
     //if the node to delete has two children, replace with the largest node in left subtree
     //recursive
     @Override
-    public BST<E> deleteWithCopyLeft (E evictee){
-        int cmp = evictee.compareTo(this.getData());
-        if (cmp < 0){
-            //delete from left subtree
-            if (this.getLeft() != null){
-                this.setLeft(this.getLeft().deleteWithCopyLeft(evictee));
-            }
-        } else if (cmp > 0){
-            //delete from right subtree
-            if (this.getRight() != null){
-                this.setRight(this.getRight().deleteWithCopyLeft(evictee));
-            }
+    public BST<E> deleteWithCopyLeft(E evictee) {
+        BST<E> target = lookup(evictee);
+        if (target == null) return getRoot();
+
+        // --- case 1: two children → use in-order predecessor ---
+        if (target.getLeft() != null && target.getRight() != null) {
+            BST<E> pred = (BST<E>) target.getLeft();
+            while (pred.getRight() != null)
+                pred = (BST<E>) pred.getRight();
+
+            target.setData(pred.getData());
+            deleteNodeWithAtMostOneChild(pred);
+
         } else {
-            //found the node to delete
-            if (this.getLeft() == null){
-                return this.getRight();
-            } else if (this.getRight() == null){
-                return this.getLeft();
-            } else {
-                //two children: find largest in left subtree
-                BST<E> largest = this.getLeft();
-                while (largest.getRight() != null){
-                    largest = largest.getRight();
-                }
-                //copy largest's data to this node
-                this.setData(largest.getData());
-                //delete largest node from left subtree
-                this.setLeft(this.getLeft().deleteWithCopyLeft(largest.getData()));
-            }
+            // --- case 2 & 3: 0 or 1 child ---
+            deleteNodeWithAtMostOneChild(target);
         }
-        
+
+        return getRoot();
     }
 
-    public BST<E> rotateLeft (){
-        return null;
+    @Override
+    public BST<E> rotateLeft() {
+        BST<E> pivot = (BST<E>) getRight();
+        if (pivot == null) return this;   // cannot rotate
+
+        BST<E> parent = (BST<E>) getParent();
+        BST<E> pivotLeft = (BST<E>) pivot.getLeft();
+
+        // pivot becomes root of this subtree
+        pivot.setLeft(this);
+        setParent(pivot);
+
+        // my right child becomes pivot’s left
+        setRight(pivotLeft);
+        if (pivotLeft != null) pivotLeft.setParent(this);
+
+        // parent adopts pivot
+        pivot.setParent(parent);
+        if (parent != null) {
+            if (parent.getLeft() == this) parent.setLeft(pivot);
+            else parent.setRight(pivot);
+        }
+
+        return pivot.getRoot();
     }
 
-    public BST<E> rotateRight (){
-        return null;
+    @Override
+    public BST<E> rotateRight() {
+        BST<E> pivot = (BST<E>) getLeft();
+        if (pivot == null) return this;  // cannot rotate
+
+        BST<E> parent = (BST<E>) getParent();
+        BST<E> pivotRight = (BST<E>) pivot.getRight();
+
+        // pivot becomes root of this subtree
+        pivot.setRight(this);
+        setParent(pivot);
+
+        // my left child becomes pivot’s right
+        setLeft(pivotRight);
+        if (pivotRight != null) pivotRight.setParent(this);
+
+        // parent adopts pivot
+        pivot.setParent(parent);
+        if (parent != null) {
+            if (parent.getLeft() == this) parent.setLeft(pivot);
+            else parent.setRight(pivot);
+        }
+
+        return pivot.getRoot();
     }
+}
 
 }
