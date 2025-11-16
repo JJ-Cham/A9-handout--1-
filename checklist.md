@@ -14,9 +14,9 @@ __**YES**___ 1 pt: Implements lookup method correctly
 
 __**YES**___ 1 pt: Implements insert method correctly
 
-_____ 1 pt: Implements delete method correctly
+__**YES**___ 1 pt: Implements delete method correctly
 
-_____ 2 pts: Implements left and right rotation methods correctly
+__**YES**___ 2 pts: Implements left and right rotation methods correctly
 
 _____ 1 pt: Includes tests for all the methods above
 
