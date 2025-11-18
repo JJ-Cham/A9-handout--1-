@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 /**
  * Unit tests for Binary Search Tree (BST) class.
  *
- * @author YOUR_NAME_HERE
+ * @author JJ Cham
  * @version Fall 2025
  */
 public class BSTTests {
@@ -54,5 +54,161 @@ public class BSTTests {
 
         tree.insert(7);
         verifyBT(tree, gt2);
+    }
+
+     // =====================================================
+    // INSERT TESTS
+    // =====================================================
+
+    @Test
+    public void testBSTInsertions() {
+        Integer[][] gt1 = {{5}};
+        Integer[][] gt2 = {{5}, {3, 7}};
+        Integer[][] gt3 = {{5}, {3, 7}, {null, null, 6, null}};
+
+        BST<Integer> tree = new BST<>(5);
+        verifyBT(tree, gt1);
+
+        tree.insert(3);
+        tree.insert(7);
+        verifyBT(tree, gt2);
+
+        tree.insert(6);
+        verifyBT(tree, gt3);
+
+        // duplicates should NOT change structure
+        tree.insert(7);
+        verifyBT(tree, gt3);
+    }
+
+    // =====================================================
+    // LOOKUP TESTS
+    // =====================================================
+
+    @Test
+    public void testBSTLookup() {
+        BST<Integer> tree = new BST<>(10);
+        tree.insert(5);
+        tree.insert(15);
+        tree.insert(12);
+
+        assertTrue(tree.lookup(10));
+        assertTrue(tree.lookup(5));
+        assertTrue(tree.lookup(15));
+        assertTrue(tree.lookup(12));
+
+        assertFalse(tree.lookup(99));
+        assertFalse(tree.lookup(-1));
+    }
+
+    // =====================================================
+    // DELETE TESTS (COPY-LEFT)
+    // =====================================================
+
+    @Test
+    public void testDeleteLeaf() {
+        BST<Integer> t = new BST<>(10);
+        t.insert(5);
+        t.insert(15);
+
+        t.delete(5); // delete leaf
+
+        Integer[][] expected = {{10}, {null, 15}};
+        verifyBT(t, expected);
+    }
+
+    @Test
+    public void testDeleteNodeWithOneChild() {
+        BST<Integer> t = new BST<>(10);
+        t.insert(5);
+        t.insert(2); // child of leaf
+        t.delete(5); // delete node that has a single child (2)
+
+        Integer[][] expected = {{10}, {2, null}};
+        verifyBT(t, expected);
+    }
+
+    @Test
+    public void testDeleteNodeWithTwoChildrenCopyLeft() {
+        /*
+              10
+             /  \
+            5    15
+           /
+          2
+        */
+
+        BST<Integer> t = new BST<>(10);
+        t.insert(5);
+        t.insert(2);
+        t.insert(15);
+
+        t.delete(5);  // copy-left → replace with predecessor (2)
+
+        Integer[][] expected = {
+            {10},
+            {2, 15},
+            {null, null, null, null}
+        };
+
+        verifyBT(t, expected);
+    }
+
+    // =====================================================
+    // ROTATION TESTS
+    // =====================================================
+
+    @Test
+    public void testRightRotation() {
+        /*
+               10
+              /
+             5
+        */
+
+        BST<Integer> t = new BST<>(10);
+        t.insert(5);
+
+        // rotate right at root
+        t = t.rotateRight();
+
+        /*
+             5
+              \
+               10
+        */
+        Integer[][] expected = {
+            {5},
+            {null, 10}
+        };
+
+        verifyBT(t, expected);
+        assertEquals((Integer)10, t.getRight().getData());
+    }
+
+    @Test
+    public void testLeftRotation() {
+        /*
+             10
+               \
+                15
+        */
+        BST<Integer> t = new BST<>(10);
+        t.insert(15);
+
+        t = t.rotateLeft();
+
+        /*
+             15
+            /
+           10
+        */
+        Integer[][] expected = {
+            {15},
+            {10, null}
+        };
+
+        verifyBT(t, expected);
+        assertEquals((Integer)10, t.getLeft().getData());
     }
 }

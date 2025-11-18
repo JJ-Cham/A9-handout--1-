@@ -8,6 +8,7 @@ public class Conversion {
 
     /** Public wrapper: Converts a sorted array to a balanced BST */
     public static <T extends Comparable<T>> BST<T> arrayToBST(T[] arr) {
+        if (arr == null || arr.length == 0) return null;
         return arrayToBSTRec(arr, 0, arr.length);
     }
 
@@ -16,6 +17,8 @@ public class Conversion {
         if (low >= high) return null;
 
         int mid = (low + high) / 2;
+
+        // Create pivot root
         BST<T> root = new BST<>(arr[mid]);
 
         // Build left subtree
@@ -46,21 +49,20 @@ public class Conversion {
         DLL<T> leftList = binaryTreeToDLL((BST<T>) root.getLeft());
         DLL<T> rightList = binaryTreeToDLL((BST<T>) root.getRight());
 
-        // Disconnect from tree
+        // Disconnect root from its children (destroy tree)
         root.setLeft(null);
         root.setRight(null);
 
-        // Single-node middle list
+        // Make 1-node DLL for root
         DLL<T> middle = new DLL<>(root, root);
 
-        // Merge in correct order
+        // Combine in correct order: left + root + right
         return concatenate(leftList, middle, rightList);
     }
 
     /** Merge A + B + C into one DLL */
     private static <T extends Comparable<T>> DLL<T> concatenate(DLL<T> A, DLL<T> B, DLL<T> C) {
-        DLL<T> AB = link(A, B);
-        return link(AB, C);
+        return link(link(A, B), C);
     }
 
     /** Connect L1.tail ↔ L2.head */
@@ -68,11 +70,11 @@ public class Conversion {
         if (L1.isEmpty()) return L2;
         if (L2.isEmpty()) return L1;
 
-        // Connect
-        L1.getTail().setRight(L2.getHead());
-        L2.getHead().setLeft(L1.getTail());
+        L1.getTail().setRight(L2.getHead());   // tail.next = head
+        L2.getHead().setLeft(L1.getTail());    // head.prev = tail
 
         return new DLL<>(L1.getHead(), L2.getTail());
     }
 }
+
 

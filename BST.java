@@ -112,46 +112,48 @@ public class BST<E extends Comparable<E>> extends BinaryTree<E> implements BST_O
     @Override
     public BST<E> rotateLeft() {
         BST<E> pivot = (BST<E>) getRight();
-        if (pivot == null) return this;   // cannot rotate
+        if (pivot == null) return getRoot();
 
         BST<E> parent = (BST<E>) getParent();
         BST<E> pivotLeft = (BST<E>) pivot.getLeft();
 
-        // pivot becomes root of this subtree
+        // Pivot becomes parent of this node
         pivot.setLeft(this);
-        setParent(pivot);
+        this.setParent(pivot);
 
-        // my right child becomes pivot’s left
-        setRight(pivotLeft);
+        // My right child becomes pivot's left
+        this.setRight(pivotLeft);
         if (pivotLeft != null) pivotLeft.setParent(this);
 
-        // parent adopts pivot
+        // Attach pivot to the old parent
         pivot.setParent(parent);
+
         if (parent != null) {
             if (parent.getLeft() == this) parent.setLeft(pivot);
             else parent.setRight(pivot);
         }
 
+        // If rotating at the root, pivot *is* the new root
         return pivot.getRoot();
     }
 
     @Override
     public BST<E> rotateRight() {
         BST<E> pivot = (BST<E>) getLeft();
-        if (pivot == null) return this;  // cannot rotate
+        if (pivot == null) return getRoot();
 
         BST<E> parent = (BST<E>) getParent();
         BST<E> pivotRight = (BST<E>) pivot.getRight();
 
-        // pivot becomes root of this subtree
+        // Pivot becomes parent of this node
         pivot.setRight(this);
-        setParent(pivot);
+        this.setParent(pivot);
 
-        // my left child becomes pivot’s right
-        setLeft(pivotRight);
+        // My left child becomes pivot's right
+        this.setLeft(pivotRight);
         if (pivotRight != null) pivotRight.setParent(this);
 
-        // parent adopts pivot
+        // Attach pivot to parent
         pivot.setParent(parent);
         if (parent != null) {
             if (parent.getLeft() == this) parent.setLeft(pivot);
@@ -162,4 +164,4 @@ public class BST<E extends Comparable<E>> extends BinaryTree<E> implements BST_O
     }
 }
 
-}
+
