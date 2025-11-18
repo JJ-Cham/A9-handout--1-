@@ -4,6 +4,9 @@
  * @author JJ
  * @version Fall 2025
  */
+import your.package.BinaryTree;
+import your.package.BST_Ops;
+
 public class Conversion {
 
     /** Public wrapper: Converts a sorted array to a balanced BST */

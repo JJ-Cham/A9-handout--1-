@@ -12,3 +12,6 @@ Any references used besides JavaDoc and course materials:
 ## Assignment Reflection
 
 Please reflect on your experience with this assignment. What was most challenging? What was most interesting?  What did you learn that you might use again?
+
+
+My experience with this assignment was not the greatest, I couldn't understand what the instructions were really asking me to do. I really struggled with this one, even though I understand the concept and how it is on the slides, translating it to code was hard. I kept getting errors and my code won't run properly. I kind of gave up. 

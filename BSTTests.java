@@ -1,5 +1,8 @@
 import org.junit.Test;
 import static org.junit.Assert.*;
+import your.package.BinaryTree;
+import your.package.BST_Ops;
+
 
 /**
  * Unit tests for Binary Search Tree (BST) class.

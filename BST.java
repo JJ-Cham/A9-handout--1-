@@ -4,6 +4,9 @@
  * @author JJ Cham
  * @version Fall 2025
  */
+import your.package.BinaryTree;
+import your.package.BST_Ops;
+
 public class BST<E extends Comparable<E>> extends BinaryTree<E> implements BST_Ops<E> {
     //constructor
     public BST(){

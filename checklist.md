@@ -18,36 +18,36 @@ __**YES**___ 1 pt: Implements delete method correctly
 
 __**YES**___ 2 pts: Implements left and right rotation methods correctly
 
-_____ 1 pt: Includes tests for all the methods above
+__**YES**___ 1 pt: Includes tests for all the methods above
 
-_____ 1 pts: Implements array to binary tree conversion correctly
+__**PART**___ 1 pts: Implements array to binary tree conversion correctly
 
-_____ 1 pts: Implements tree to DLL conversion correctly
+_**PART**____ 1 pts: Implements tree to DLL conversion correctly
 
-_____ 1 pts: Tree to DLL conversion allocates no new nodes
+__**PART**___ 1 pts: Tree to DLL conversion allocates no new nodes
 
-_____ 1 pt: Includes tests for conversion methods above
+__**YES**___ 1 pt: Includes tests for conversion methods above
 
 
 
 ## General Items:
 
-_____ 4 pts: Programs compile without errors or warnings
+___**NO**__ 4 pts: Programs compile without errors or warnings
 
-_____ 2 pts: Executes fully & consistently without crashing (exception/freeze)
+__**NO**___ 2 pts: Executes fully & consistently without crashing (exception/freeze)
 
 _____ 2 pt: Complies with style guidelines (missing items 1 pt each):
 
-      _____ Classes & class members all have Javadoc header comments
+      ___**NO**__ Classes & class members all have Javadoc header comments
 
-      _____ Clear and consistent indentation of bracketed sections
+      ___**NO**__ Clear and consistent indentation of bracketed sections
 
-      _____ Adheres to Java conventions on naming & capitalization
+      __**YES**___ Adheres to Java conventions on naming & capitalization
 
-      _____ Methods & variables all have clear and accurate names
+      __**YES**___ Methods & variables all have clear and accurate names
 
-      _____ Methods avoid confusing side effects
+      __**NO**___ Methods avoid confusing side effects
 
-_____ 1 pt: All required files included with submission (including completed checklist file)
+__**YES**___ 1 pt: All required files included with submission (including completed checklist file)
 
-_____ 1 pt: readme.md contains reflection on the assignment
+_**YES**____ 1 pt: readme.md contains reflection on the assignment
